@@ -120,7 +120,7 @@ sprintf("The total number of rows missing/NA steps is %s",
 ## [1] "The total number of rows missing/NA steps is 2304"
 ```
 
-Below is the code used to fill in the blank values using the mean value of that missing interval from the entire date range:
+Below is the code used to fill in the blank values.  I will be using the mean for that interval taken from the average daily activity pattern exercise (which takes the mean for non NA intervals across all dates):
 
 
 ```r

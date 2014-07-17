@@ -297,7 +297,7 @@ sprintf(&quot;The total number of rows missing/NA steps is %s&quot;,
 <pre><code>## [1] &quot;The total number of rows missing/NA steps is 2304&quot;
 </code></pre>
 
-<p>Below is the code used to fill in the blank values using the mean value of that missing interval from the entire date range:</p>
+<p>Below is the code used to fill in the blank values.  I will be using the mean for that interval taken from the average daily activity pattern exercise (which takes the mean for non NA intervals across all dates):</p>
 
 <pre><code class="r"># Create population of NAs to fix
 tocorrect &lt;- subset(activity, is.na(activity$steps) == TRUE)
