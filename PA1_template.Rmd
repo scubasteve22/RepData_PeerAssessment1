@@ -159,7 +159,7 @@ plot(meancorr3$date, meancorr3$steps,
      main="Median no. of steps each day")
 ```
 
-The changes have had a significant impact early on where there was a large % volume of NA but later on it has actually helped to provide some better definition matching the general pattern; the point of interest is around the spike on median.  The trend tends towards to 0 but there are peaks which would warrant further investigation.
+The changes have had a significant impact early on where there was a large % volume of NA but later on it has actually helped to provide some better definition matching the general pattern; the point of interest is around the spike on median.  The trend tends towards to 0 but there are peaks which would warrant further investigation but, theoretically, driven by the large volume on NA's on those days previously (maybe meaning true value is closer to 0?).
 
 ## Are there differences in activity patterns between weekdays and weekends?
 ```{r weekend.weekday}
