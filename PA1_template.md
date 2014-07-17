@@ -1,7 +1,8 @@
 # Reproducible Research: Peer Assessment 1
 
 Setting the libraries and global options for the document:
-```{r global}
+
+```r
 ## Peer assessment 1 - Scuba22
 
 # Ensure all necessary libraries are read in (some may not be needed in final cut)
@@ -13,7 +14,6 @@ library(data.table)
 
 opts_chunk$set(warning = FALSE, message = FALSE, echo = TRUE, 
                fig.width = 10)
-
 ```
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.  `warning = FALSE` and `message = FALSE` are added to remove the uncessary warnings and messages when producing the plots.  Finally added `fig.width = 10` to make the plots wider and easier to read.
 
@@ -21,7 +21,8 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 ## Loading and preprocessing the data
 
 Below is the code used to produce the base data:
-```{r basetable}
+
+```r
 # Set the location of the data to use
 fileurl<-"https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
 
@@ -50,20 +51,24 @@ mean1 <- aggregate(steps~date, dailysteps, sum)
 mean2 <- aggregate(steps~date, dailysteps, mean)
 mean3 <- aggregate(steps~date, dailysteps, median)
 avgdap1 <- aggregate(steps~interval, dailysteps, mean)
-
 ```
 
 
 ## What is mean total number of steps taken per day?
 
-```{r histplot}
+
+```r
 # Create plot to show total number of steps per day
 qplot(mean1$date, mean1$steps, geom="bar", stat="identity", colour=I("black"), fill = I("blue")) + 
   xlab("Date") +
   ylab("Total Steps") +
   ggtitle("Total number of steps taken each day") +
   scale_x_date(breaks = "1 week", minor_breaks = "1 day", labels=date_format("%D"))
+```
 
+![plot of chunk histplot](figure/histplot1.png) 
+
+```r
 # Create the plots to show the mean and median
 par(mfrow=c(1,2)) 
 plot(mean2$date, mean2$steps, 
@@ -72,40 +77,53 @@ plot(mean2$date, mean2$steps,
 plot(mean3$date, mean3$steps, 
      type="l", xlab="Date", ylab="Median of Daily Steps",
      main="Median no. of steps each day")
-
 ```
+
+![plot of chunk histplot](figure/histplot2.png) 
 
 The median suggests that a majority of the intervals are populated with 0 and that our ditsribution is skewed.
 
 
 ## What is the average daily activity pattern?
 
-```{r avgdap}
+
+```r
 # Create the plot for the average steps by interval
 plot(avgdap1$interval, avgdap1$steps, 
      type="l", xlab="5-minute interval", ylab="Average no. of steps taken",
      main="Average number of steps taken (averaged across all days)")
+```
 
+![plot of chunk avgdap](figure/avgdap.png) 
 
+```r
 # Uses the which.max function to find the row of the highest value and display it
 sprintf("The 5-minute interval, on average across all the days in the dataset, containing the maximum number of steps is %s", 
         avgdap1[apply(avgdap1, 2, which.max)[2], 1])
+```
 
+```
+## [1] "The 5-minute interval, on average across all the days in the dataset, containing the maximum number of steps is 835"
 ```
 
 
 ## Imputing missing values
 
-```{r how.many.missing}
+
+```r
 # Calculate the number of NA
 sprintf("The total number of rows missing/NA steps is %s", 
         nrow(subset(activity, is.na(activity$steps) == TRUE)))
+```
 
+```
+## [1] "The total number of rows missing/NA steps is 2304"
 ```
 
 Below is the code used to fill in the blank values using the mean value of that missing interval from the entire date range:
 
-```{r replace.missing}
+
+```r
 # Create population of NAs to fix
 tocorrect <- subset(activity, is.na(activity$steps) == TRUE)
 
@@ -134,12 +152,14 @@ qplot(meancorr1$date, meancorr1$steps, geom="bar", stat="identity", colour=I("bl
   ylab("Total Steps") +
   ggtitle("Total number of steps taken each day") +
   scale_x_date(breaks = "1 week", minor_breaks = "1 day", labels=date_format("%D"))
-
 ```
+
+![plot of chunk replace.missing](figure/replace.missing.png) 
 
 I have brought together the previous graphs with the imputed data for comparison:
 
-```{r comparison}
+
+```r
 # Create the plots to show the mean and median
 par(mfrow=c(2,2)) 
 plot(mean2$date, mean2$steps, 
@@ -156,10 +176,13 @@ plot(meancorr3$date, meancorr3$steps,
      main="Median no. of steps each day")
 ```
 
+![plot of chunk comparison](figure/comparison.png) 
+
 The changes have had a significant impact early on where there was a large % volume of NA but later on it has actually helped to provide some better definition matching the general pattern; the point of interest is around the spike on median.  The trend tends towards to 0 but there are peaks which would warrant further investigation but, theoretically, driven by the large volume on NA's on those days previously (maybe meaning true value is closer to 0?).
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r weekend.weekday}
+
+```r
 # Create new column for named day of week
 corrected["weekday"] <- weekdays(corrected$date)
 
@@ -179,8 +202,9 @@ xyplot(steps ~ interval | weekday, data = weekendday, layout = c(1,2),
          panel.xyplot(x, y, ...) 
          panel.abline(h = mean(y), lty = 2, heading = "f") 
        })
-
 ```
+
+![plot of chunk weekend.weekday](figure/weekend.weekday.png) 
 
 Although we do see a significant spike in weekday activity, the mean (dotted line) shows us that overall activity on the weekend is higher and better distributed.
 
